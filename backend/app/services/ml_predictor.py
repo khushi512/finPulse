@@ -39,15 +39,15 @@ def predict_next_month_spending(db: Session, user_id) -> Dict:
     """
     monthly_spending = get_monthly_spending(db, user_id, months=6)
     
-    if len(monthly_spending) < 2:
+    if not monthly_spending:
         return {
             "prediction": 0,
             "confidence": "low",
             "method": "insufficient_data",
-            "message": "Need at least 2 months of data for predictions"
+            "message": "Add at least one transaction to see predictions"
         }
     
-    # Calculate moving average (last 3 months)
+    # Calculate moving average (using whatever data we have)
     recent_months = sorted(monthly_spending.items())[-3:]
     recent_values = [amount for _, amount in recent_months]
     
@@ -92,12 +92,12 @@ def predict_category_spending(db: Session, user_id, category: str) -> Dict:
         Transaction.is_income == False
     ).all()
     
-    if len(transactions) < 3:
+    if not transactions:
         return {
             "category": category,
             "prediction": 0,
             "confidence": "low",
-            "message": "Insufficient data for this category"
+            "message": "No transactions in this category"
         }
     
     # Group by month

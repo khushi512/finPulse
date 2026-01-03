@@ -86,18 +86,19 @@ export default function Insights() {
         const prediction = insights.next_month_prediction.prediction;
         const confidence = insights.next_month_prediction.confidence;
 
-        // If no transactions or very low confidence (new user)
-        if (confidence === 'low' || prediction === 0) {
+        // If really zero prediction (no data)
+        if (prediction === 0) {
             return { score: 'N/A', status: 'Not Enough Data', color: 'gray' };
         }
 
-        if (confidence === 'high' && prediction > 0) {
+        if (confidence === 'high') {
             return { score: 85, status: 'Good', color: 'green' };
         } else if (confidence === 'medium') {
             return { score: 70, status: 'Fair', color: 'yellow' };
         }
-        // Fallback for actual bad health but with data
-        return { score: 50, status: 'Needs Attention', color: 'orange' };
+
+        // Low confidence but has data -> Show "Developing"
+        return { score: 60, status: 'Developing', color: 'blue' };
     };
 
     const health = getFinancialHealth();
