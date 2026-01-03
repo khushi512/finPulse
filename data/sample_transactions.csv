@@ -1,0 +1,16 @@
+date,amount,description,category,is_income,merchant
+2025-12-20,250,Swiggy Order,Food & Dining,false,Swiggy
+2025-12-21,150,Auto Rickshaw,Transport,false,
+2025-12-22,50000,Monthly Salary,Income,true,Employer
+2025-12-23,1200,Amazon Purchase,Shopping,false,Amazon
+2025-12-24,800,Netflix Subscription,Entertainment,false,Netflix
+2025-12-25,500,Electricity Bill,Bills & Utilities,false,BESCOM
+2025-12-26,350,Zomato Order,Food & Dining,false,Zomato
+2025-12-27,2500,Petrol,Transport,false,HP Petrol
+2025-12-28,1500,Pharmacy,Healthcare,false,MedPlus
+2025-12-29,3000,Weekend Trip,Travel,false,MakeMyTrip
+2025-12-30,420,Starbucks,Food & Dining,false,Starbucks
+2025-12-25,999,Spotify Annual,Entertainment,false,Spotify
+2025-12-26,180,Uber Ride,Transport,false,Uber
+2025-12-27,600,Groceries,Shopping,false,BigBasket
+2025-12-28,1800,Mobile Recharge,Bills & Utilities,false,Jio
