@@ -339,7 +339,14 @@ async def import_transactions(
             errors.append(f"Row {row_num}: Unexpected error - {str(e)}")
             skipped += 1
     
-    db.commit()
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Database error: {str(e)}"
+        )
     
     return CSVImportResponse(
         imported=imported,

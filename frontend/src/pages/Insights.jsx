@@ -81,16 +81,22 @@ export default function Insights() {
     };
 
     const getFinancialHealth = () => {
-        if (!insights?.next_month_prediction) return { score: 0, status: 'Unknown', color: 'gray' };
+        if (!insights?.next_month_prediction) return { score: 0, status: 'Not Enough Data', color: 'gray' };
 
         const prediction = insights.next_month_prediction.prediction;
         const confidence = insights.next_month_prediction.confidence;
+
+        // If no transactions or very low confidence (new user)
+        if (confidence === 'low' || prediction === 0) {
+            return { score: 'N/A', status: 'Not Enough Data', color: 'gray' };
+        }
 
         if (confidence === 'high' && prediction > 0) {
             return { score: 85, status: 'Good', color: 'green' };
         } else if (confidence === 'medium') {
             return { score: 70, status: 'Fair', color: 'yellow' };
         }
+        // Fallback for actual bad health but with data
         return { score: 50, status: 'Needs Attention', color: 'orange' };
     };
 
@@ -122,17 +128,24 @@ export default function Insights() {
                                 {/* AI Score */}
                                 <div className="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20 rounded-xl p-6 border border-teal-200 dark:border-teal-700/50">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-2xl">🎯</span>
+                                        <svg className="w-6 h-6 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
                                         <p className="text-teal-600 dark:text-teal-400 text-sm font-medium">AI Score</p>
                                     </div>
-                                    <p className="text-3xl font-bold text-gray-900 dark:text-white">{health.score}/100</p>
+                                    <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                                        {health.score}
+                                        {typeof health.score === 'number' && <span className="text-lg text-gray-500 ml-1">/100</span>}
+                                    </p>
                                     <p className="text-teal-600 dark:text-teal-400 text-sm mt-1">Financial Health</p>
                                 </div>
 
                                 {/* Anomalies Detected */}
                                 <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl p-6 border border-red-200 dark:border-red-700/50">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-2xl">🔍</span>
+                                        <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
                                         <p className="text-red-600 dark:text-red-400 text-sm font-medium">Anomalies Detected</p>
                                     </div>
                                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -141,20 +154,27 @@ export default function Insights() {
                                     <p className="text-red-600 dark:text-red-400 text-sm mt-1">Last 90 days</p>
                                 </div>
 
+
                                 {/* Savings Rate */}
                                 <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 border border-green-200 dark:border-green-700/50">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-2xl">📈</span>
+                                        <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                        </svg>
                                         <p className="text-green-600 dark:text-green-400 text-sm font-medium">Savings Rate</p>
                                     </div>
-                                    <p className="text-3xl font-bold text-gray-900 dark:text-white">81%</p>
+                                    <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                                        {insights?.savings_analysis?.rate !== undefined ? `${insights.savings_analysis.rate}%` : 'N/A'}
+                                    </p>
                                     <p className="text-green-600 dark:text-green-400 text-sm mt-1">This month</p>
                                 </div>
 
                                 {/* Financial Health */}
                                 <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 border border-green-200 dark:border-green-700/50">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-2xl">💚</span>
+                                        <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
                                         <p className="text-green-600 dark:text-green-400 text-sm font-medium">Financial Health</p>
                                     </div>
                                     <p className="text-3xl font-bold text-gray-900 dark:text-white">{health.status}</p>
@@ -163,43 +183,53 @@ export default function Insights() {
                             </div>
 
                             {/* Predictions & Tips */}
-                            <div className="mb-8">
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Predictions & Tips</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {/* Food Budget Alert */}
-                                    <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-700/30 rounded-xl p-6">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <span className="text-2xl">⚠️</span>
-                                            <h3 className="font-semibold text-yellow-900 dark:text-yellow-300">Food Budget Alert</h3>
+                            {typeof health.score === 'number' && health.score > 0 ? (
+                                <div className="mb-8">
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Predictions & Tips</h2>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {/* Food Budget Alert */}
+                                        <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-700/30 rounded-xl p-6">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">⚠️</span>
+                                                <h3 className="font-semibold text-yellow-900 dark:text-yellow-300">Food Budget Alert</h3>
+                                            </div>
+                                            <p className="text-sm text-yellow-800 dark:text-yellow-400">
+                                                Based on your current spending pattern, you'll exceed your food budget by ₹2,150 by month end.
+                                            </p>
                                         </div>
-                                        <p className="text-sm text-yellow-800 dark:text-yellow-400">
-                                            Based on your current spending pattern, you'll exceed your food budget by ₹2,150 by month end.
-                                        </p>
-                                    </div>
 
-                                    {/* Savings Opportunity */}
-                                    <div className="bg-cyan-50 dark:bg-cyan-900/10 border border-cyan-200 dark:border-cyan-700/30 rounded-xl p-6">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <span className="text-2xl">💡</span>
-                                            <h3 className="font-semibold text-cyan-900 dark:text-cyan-300">Savings Opportunity</h3>
+                                        {/* Savings Opportunity */}
+                                        <div className="bg-cyan-50 dark:bg-cyan-900/10 border border-cyan-200 dark:border-cyan-700/30 rounded-xl p-6">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">💡</span>
+                                                <h3 className="font-semibold text-cyan-900 dark:text-cyan-300">Savings Opportunity</h3>
+                                            </div>
+                                            <p className="text-sm text-cyan-800 dark:text-cyan-400">
+                                                If you keep up the current trend, you could save ₹5,500 monthly. Great job!
+                                            </p>
                                         </div>
-                                        <p className="text-sm text-cyan-800 dark:text-cyan-400">
-                                            If you keep up the current trend, you could save ₹5,500 monthly. Great job!
-                                        </p>
-                                    </div>
 
-                                    {/* Smart Tip */}
-                                    <div className="bg-purple-50 dark:bg-purple-900/10 border border-purple-200 dark:border-purple-700/30 rounded-xl p-6">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <span className="text-2xl">💡</span>
-                                            <h3 className="font-semibold text-purple-900 dark:text-purple-300">Smart Tip</h3>
+                                        {/* Smart Tip */}
+                                        <div className="bg-purple-50 dark:bg-purple-900/10 border border-purple-200 dark:border-purple-700/30 rounded-xl p-6">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">💡</span>
+                                                <h3 className="font-semibold text-purple-900 dark:text-purple-300">Smart Tip</h3>
+                                            </div>
+                                            <p className="text-sm text-purple-800 dark:text-purple-400">
+                                                Your transport costs are 18% lower this month. Consider using public transit more!
+                                            </p>
                                         </div>
-                                        <p className="text-sm text-purple-800 dark:text-purple-400">
-                                            Your transport costs are 18% lower this month. Consider using public transit more!
-                                        </p>
                                     </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="mb-8 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-8 text-center border border-gray-200 dark:border-gray-700 border-dashed">
+                                    <span className="text-4xl mb-3 block">📊</span>
+                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Not Enough Data Yet</h3>
+                                    <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+                                        Add more transactions to unlock smart predictions, budget alerts, and personalized saving tips.
+                                    </p>
+                                </div>
+                            )}
 
                             {/* Unusual Transactions */}
                             {visibleAnomalies.length > 0 && (
@@ -210,15 +240,15 @@ export default function Insights() {
                                             <div
                                                 key={index}
                                                 className={`bg-white dark:bg-gray-800 rounded-xl p-6 border ${anomaly.severity === 'high'
-                                                        ? 'border-red-200 dark:border-red-700/50'
-                                                        : 'border-orange-200 dark:border-orange-700/50'
+                                                    ? 'border-red-200 dark:border-red-700/50'
+                                                    : 'border-orange-200 dark:border-orange-700/50'
                                                     }`}
                                             >
                                                 <div className="flex items-start justify-between mb-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className={`w-12 h-12 rounded-full flex items-center justify-center ${anomaly.severity === 'high'
-                                                                ? 'bg-red-100 dark:bg-red-500/20'
-                                                                : 'bg-orange-100 dark:bg-orange-500/20'
+                                                            ? 'bg-red-100 dark:bg-red-500/20'
+                                                            : 'bg-orange-100 dark:bg-orange-500/20'
                                                             }`}>
                                                             <span className="text-2xl">🔍</span>
                                                         </div>
@@ -230,8 +260,8 @@ export default function Insights() {
                                                         </div>
                                                     </div>
                                                     <span className={`px-3 py-1 text-xs rounded-full font-medium ${anomaly.severity === 'high'
-                                                            ? 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400'
-                                                            : 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400'
+                                                        ? 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400'
+                                                        : 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400'
                                                         }`}>
                                                         {anomaly.severity}
                                                     </span>
@@ -319,18 +349,18 @@ export default function Insights() {
                                 </div>
 
                                 <div className={`p-4 rounded-lg ${selectedAnomaly.severity === 'high'
-                                        ? 'bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-700/30'
-                                        : 'bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-700/30'
+                                    ? 'bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-700/30'
+                                    : 'bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-700/30'
                                     }`}>
                                     <p className={`text-sm font-medium ${selectedAnomaly.severity === 'high'
-                                            ? 'text-red-700 dark:text-red-400'
-                                            : 'text-orange-700 dark:text-orange-400'
+                                        ? 'text-red-700 dark:text-red-400'
+                                        : 'text-orange-700 dark:text-orange-400'
                                         }`}>
                                         Severity: {selectedAnomaly.severity.toUpperCase()}
                                     </p>
                                     <p className={`text-xs mt-1 ${selectedAnomaly.severity === 'high'
-                                            ? 'text-red-600 dark:text-red-400'
-                                            : 'text-orange-600 dark:text-orange-400'
+                                        ? 'text-red-600 dark:text-red-400'
+                                        : 'text-orange-600 dark:text-orange-400'
                                         }`}>
                                         This transaction is {selectedAnomaly.z_score?.toFixed(1)}x above your average spending
                                     </p>

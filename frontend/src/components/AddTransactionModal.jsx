@@ -47,7 +47,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSubmit }) {
                 }
             } catch (err) {
                 // Silently fail - ML is optional
-                console.log('ML suggestion failed:', err);
+                // Silently fail - ML is optional
+                // console.log('ML suggestion failed:', err);
                 setMlSuggestion(null);
             } finally {
                 setSuggestingCategory(false);

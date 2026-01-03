@@ -253,14 +253,42 @@ def detect_anomalies(db: Session, user_id, days: int = 90, threshold: float = 2.
     return sorted(anomalies, key=lambda x: x["z_score"], reverse=True)
 
 
+def calculate_current_month_savings(db: Session, user_id) -> Dict:
+    """Calculate savings rate for the current month."""
+    today = date.today()
+    start_date = date(today.year, today.month, 1)
+    
+    transactions = db.query(Transaction).filter(
+        Transaction.user_id == user_id,
+        Transaction.date >= start_date
+    ).all()
+    
+    income = sum(t.amount for t in transactions if t.is_income) / 100
+    expense = sum(t.amount for t in transactions if not t.is_income) / 100
+    
+    if income == 0:
+        return {"rate": 0, "status": "No Income"}
+        
+    savings = income - expense
+    rate = (savings / income) * 100
+    
+    return {
+        "rate": round(rate, 1),
+        "savings": round(savings, 2),
+        "income": round(income, 2),
+        "expense": round(expense, 2)
+    }
+
+
 def get_spending_insights(db: Session, user_id) -> Dict:
     """
     Generate comprehensive spending insights.
-    Combines predictions, alerts, and anomalies.
+    Combines predictions, alerts, anomalies, and savings rate.
     """
     return {
         "next_month_prediction": predict_next_month_spending(db, user_id),
         "budget_alerts": get_budget_alerts(db, user_id),
         "anomalies": detect_anomalies(db, user_id)[:5],  # Top 5 anomalies
+        "savings_analysis": calculate_current_month_savings(db, user_id),
         "generated_at": datetime.utcnow().isoformat()
     }

@@ -11,10 +11,42 @@ export default function Sidebar() {
     const location = useLocation();
 
     const navItems = [
-        { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-        { path: '/transactions', label: 'Transactions', icon: '💳' },
-        { path: '/budgets', label: 'Budgets', icon: '💰' },
-        { path: '/insights', label: 'Insights', icon: '🤖' },
+        {
+            path: '/dashboard',
+            label: 'Dashboard',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+            )
+        },
+        {
+            path: '/transactions',
+            label: 'Transactions',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+            )
+        },
+        {
+            path: '/budgets',
+            label: 'Budgets',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            )
+        },
+        {
+            path: '/insights',
+            label: 'Insights',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            )
+        },
     ];
 
     const handleLogout = () => {
@@ -123,7 +155,6 @@ export default function Sidebar() {
                         onClick={toggleTheme}
                         className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition mb-2"
                     >
-                        <span className="text-xl">{theme === 'dark' ? '☀️' : '🌙'}</span>
                         {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
                     </button>
 
@@ -132,7 +163,11 @@ export default function Sidebar() {
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition"
                     >
-                        <span className="text-xl">🚪</span>
+                        <span className="text-xl">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </span>
                         Logout
                     </button>
                 </div>

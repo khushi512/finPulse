@@ -161,7 +161,7 @@ export default function Dashboard() {
                                 <p className={`text-3xl font-bold mt-2 ${(summary?.balance || 0) >= 0 ? 'text-gray-900 dark:text-white' : 'text-red-500'}`}>
                                     {formatAmount(summary?.balance || 0)}
                                 </p>
-                                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">All-time balance</p>
+                                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Current Net Worth (All-time)</p>
                             </div>
                             <div className="bg-white dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700/50 shadow-sm">
                                 <p className="text-gray-500 dark:text-gray-400 text-sm">Monthly Income</p>
@@ -262,7 +262,7 @@ export default function Dashboard() {
             <ImportCSVModal
                 isOpen={showImportModal}
                 onClose={() => setShowImportModal(false)}
-                onSuccess={fetchData}
+                onImport={handleImportCSV}
             />
         </div>
     );

@@ -71,7 +71,7 @@ export default function NotificationBell() {
     const notificationCount = notifications.length;
 
     return (
-        <div className="relative">
+        <div className="relative" onMouseLeave={() => setIsOpen(false)}>
             {/* Bell Icon */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -114,7 +114,7 @@ export default function NotificationBell() {
                                 </div>
                             ) : notifications.length === 0 ? (
                                 <div className="p-8 text-center">
-                                    <span className="text-4xl mb-2 block">✅</span>
+                                    <span className="text-4xl mb-2 block"></span>
                                     <p className="text-gray-500 dark:text-gray-400 text-sm">
                                         No alerts! Everything looks good.
                                     </p>
@@ -136,10 +136,10 @@ export default function NotificationBell() {
                                                     {notification.message}
                                                 </p>
                                                 <span className={`inline-block mt-2 px-2 py-0.5 text-xs rounded-full ${notification.severity === 'critical'
-                                                        ? 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400'
-                                                        : notification.severity === 'warning'
-                                                            ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400'
-                                                            : 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400'
+                                                    ? 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400'
+                                                    : notification.severity === 'warning'
+                                                        ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400'
+                                                        : 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400'
                                                     }`}>
                                                     {notification.severity}
                                                 </span>

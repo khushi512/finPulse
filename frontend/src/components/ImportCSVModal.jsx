@@ -43,7 +43,9 @@ export default function ImportCSVModal({ isOpen, onClose, onImport }) {
             const importResult = await onImport(file);
             setResult(importResult);
         } catch (err) {
-            setError(err.response?.data?.detail || 'Import failed');
+            // console.error("Import Error:", err);
+            const errorMessage = err.response?.data?.detail || err.message || 'Import failed';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
